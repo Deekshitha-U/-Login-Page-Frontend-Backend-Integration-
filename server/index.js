@@ -232,5 +232,9 @@ app.post("/api/logout", (req, res) => {
   sessions.delete(token);
   res.json({ success: true });
 });
-
+const DIST = path.join(__dirname, "..", "client", "dist");
+if (fs.existsSync(DIST)) {
+  app.use(express.static(DIST));
+  app.get(/^(?!\/api).*/, (_req, res) => res.sendFile(path.join(DIST, "index.html")));
+}
 app.listen(PORT, () => console.log(`Prismora API running on http://localhost:${PORT}`));
